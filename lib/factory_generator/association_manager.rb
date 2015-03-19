@@ -9,6 +9,7 @@ class AssociationManager
     @klass.reflections.keys.map do |x|
       reflection = @klass.reflections[x]
       return_hash[x.to_s]= {
+          method: x,
           macro: reflection.macro,
           klass: reflection.class_name,
           foreign_key: reflection.foreign_key,
@@ -19,17 +20,25 @@ class AssociationManager
     return_hash
   end
 
-  def self.determine_association(association_info)
+  def determine_association(association_info)
     if association_info[:macro] == :belongs_to
       create_belongs_to_association(association_info[:klass])
-    else
-      create_has_manny_association
+    elsif association_info[:macro] == :has_many
+      create_has_manny_associations(association_info[:klass])
     end
   end
 
   def create_belongs_to_association(klass)
     <<-EOF
 association :#{klass.downcase}, factory: :#{klass.downcase}
+    EOF
+  end
+
+  def create_has_manny_associations(klass)
+    <<-EOF
+after(:create) do |x|
+  create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
+end
     EOF
   end
 end
