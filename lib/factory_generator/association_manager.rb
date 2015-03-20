@@ -20,25 +20,27 @@ class AssociationManager
     return_hash
   end
 
-  def determine_association(association_info)
-    if association_info[:macro] == :belongs_to
-      create_belongs_to_association(association_info[:klass])
-    elsif association_info[:macro] == :has_many
-      create_has_manny_associations(association_info[:klass])
-    end
+  def determine_association(association_info, class_name, method)
+    relation = association_info[:macro]
+    text = if relation == :belongs_to
+             create_belongs_to_association(association_info[:klass], class_name, method)
+           elsif relation == :has_many || relation == :has_and_belongs_to_many
+             create_has_manny_associations(association_info[:klass])
+           end
+    <<-EOF
+    #{text}
+    EOF
   end
 
-  def create_belongs_to_association(klass)
-    <<-EOF
-association :#{klass.downcase}, factory: :#{klass.downcase}
-    EOF
+  def create_belongs_to_association(klass, class_name, method)
+    method = method == klass.downcase ? klass.downcase : method
+    class_name = klass == class_name ? klass : class_name
+    "association :#{method}, factory: :#{class_name.downcase}"
   end
 
   def create_has_manny_associations(klass)
-    <<-EOF
-after(:create) do |x|
-  create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
-end
-    EOF
+  %Q(after(:create) do |x|
+      create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
+    end)
   end
 end
