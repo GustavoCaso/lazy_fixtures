@@ -8,8 +8,11 @@ Gem::Specification.new do |spec|
   spec.version       = FactoryGenerator::VERSION
   spec.authors       = ["GustavoCaso"]
   spec.email         = ["gustavocaso@gmail.com"]
-  spec.summary       = %q{TODO: Write a short summary. Required.}
-  spec.description   = %q{TODO: Write a longer description. Optional.}
+  spec.summary       = %q{Easy generator to save time when creating them}
+  spec.description   = %q{With this gem you will save time creating factory model,
+                          with different options you will be able to create a full compatible
+                          factory tree from your database
+                          }
   spec.homepage      = ""
   spec.license       = "MIT"
 
