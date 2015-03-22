@@ -15,10 +15,11 @@ module FactoryGenerator
   end
 
   class Configuration
-    attr_accessor :factory_directory
+    attr_accessor :factory_directory, :factory_names
 
     def initialize
       @factory_directory = 'spec/factories'
+      @factory_names = []
     end
   end
 
