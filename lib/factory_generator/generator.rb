@@ -1,9 +1,12 @@
 module FactoryGenerator
   class Generator
 
+    attr_reader :factory_body
+
     DEFAULT_OPTIONS = {
         nested: false,
         overwrite: false,
+        create: true,
         parent: [],
         skip_params: [],
         params: {}
@@ -19,7 +22,7 @@ module FactoryGenerator
       options[:skip_params].each { |x|  @attributes.delete(x)} unless options[:skip_params].empty?
       @attributes.merge!(options[:params]) unless options[:params].empty?
       @association = AssociationManager.new(@object)
-      @file = FileManager.new(klass)
+      @file = FileManager.new(klass, options)
       @file.create_file
       @key_columns = @association.get_association_info
       @factory_body = ''

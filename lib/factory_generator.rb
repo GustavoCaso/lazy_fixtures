@@ -18,7 +18,7 @@ module FactoryGenerator
     attr_accessor :factory_directory, :factory_names
 
     def initialize
-      @factory_directory = 'spec/factories'
+      @factory_directory = ''
       @factory_names = []
     end
   end
