@@ -15,6 +15,6 @@ describe FactoryGenerator::Generator do
     created_at '1986-09-29T00:00:00+00:00'
     updated_at '1986-09-29T00:00:00+00:00'
     EOF
-    expect(FactoryGenerator::Generator.new(user, create: false).factory_body).to eq text
+    expect(FactoryGenerator::Generator.new(user, create: false).generate).to eq text
   end
 end

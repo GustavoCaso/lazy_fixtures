@@ -24,6 +24,6 @@ module FactoryGenerator
   end
 
   def self.generate(object, options = {})
-    FactoryGenerator::Generator.new(object, options)
+    FactoryGenerator::Generator.new(object, options).generate
   end
 end
