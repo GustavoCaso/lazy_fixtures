@@ -1,41 +1,40 @@
 module FactoryGenerator
   class Generator
 
-    attr_reader :factory_body
+    attr_reader :factory_body, :file, :attributes, :options
 
     DEFAULT_OPTIONS = {
-        nested: false,
-        overwrite: false,
-        create: true,
-        parent: [],
-        skip_params: [],
-        params: {}
+        nested:      false,
+        overwrite:   false,
+        create:      true,
+        parent:      [],
+        skip_attr:   [],
+        change_attr: {}
     }
 
     def initialize(object, options = {})
-      options = DEFAULT_OPTIONS.merge(options)
-
+      @options = DEFAULT_OPTIONS.merge(options)
       @object = get_object(object)
-      @parent = options[:parent]
-      klass = @object.class.name.downcase
       @attributes = @object.attributes
-      options[:skip_params].each { |x|  @attributes.delete(x)} unless options[:skip_params].empty?
-      @attributes.merge!(options[:params]) unless options[:params].empty?
-      @association = AssociationManager.new(@object)
-      @file = FileManager.new(klass, options)
-      @file.create_file
-      @key_columns = @association.get_association_info
       @factory_body = ''
-      write_associations if options[:nested]
-      write_attributes
-      text = write_factory(klass, @factory_body)
-      @file.write_file(text)
     end
 
-    def write_factory(class_name, attributes)
+    def generate
+      # In this first implementation of the gem it only allow to manipulate the
+      # first object
+      manipulate_attributes
+      create_file
+      write_associations if @options[:nested]
+      write_attributes
+      text = generate_factory(@object.class.name.downcase, @factory_body)
+      @file.write_file(text)
+      self
+    end
+
+    def generate_factory(class_name, attributes)
       <<-EOF
 FactoryGirl.define do
-  factory :#{class_name.downcase} do
+  factory :#{class_name} do
 #{attributes}
   end
 end
@@ -43,16 +42,16 @@ end
     end
 
     def write_associations
-      @key_columns.keys.each do |method|
+      association.columns_info.keys.each do |method|
         begin
           object =  @object.send(method)
           object = get_object(object)
           object_class = object.class.name
-          next if object.nil? || (object.respond_to?('first') && object.empty?)
-          parent_included = @parent.include? object_class
-          (@parent << object_class).uniq!
-          self.class.new(object, nested: true, parent: @parent) unless parent_included
-          @factory_body += @association.determine_association(@key_columns[method], object_class, method)
+          next if invalid_object(object)
+          parent_included = @options[:parent].include? object_class
+          (@options[:parent] << object_class).uniq!
+          self.class.new(object, nested: true, parent: @options[:parent]).generate unless parent_included
+          @factory_body += association.determine_association(association.columns_info[method], object_class, method)
           @attributes.delete_if {|k,v| k =~ Regexp.new(method) && !v.nil?}
         rescue => e
           puts "There was an error creating the association #{e} => #{e.backtrace}"
@@ -71,6 +70,24 @@ end
 
     def get_object(object)
       object.respond_to?('first') ? object.first : object
+    end
+
+    def invalid_object(object)
+      object.nil? || (object.respond_to?('first') && object.empty?)
+    end
+
+    def manipulate_attributes
+      @options[:skip_attr].each { |x|  @attributes.delete(x)} unless options[:skip_attr].empty?
+      @attributes.merge!(@options[:change_attr]) unless @options[:change_attr].empty?
+    end
+
+    def create_file
+      @file ||= FileManager.new(@object.class.name.downcase, @options)
+      @file.create_file
+    end
+
+    def association
+      AssociationManager.new(@object)
     end
   end
 end

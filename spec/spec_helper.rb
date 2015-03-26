@@ -9,3 +9,13 @@ FactoryGenerator.configure do |config|
   config.factory_directory = '.'
   config.factory_names = []
 end
+
+RSpec.configure do |config|
+  config.before(:each) do
+    User.destroy_all
+  end
+
+  config.after(:each) do
+    User.destroy_all
+  end
+end
