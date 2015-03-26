@@ -20,12 +20,15 @@ module FactoryGenerator
     end
 
     def generate
+      # In this first implementation of the gem it only allow to manipulate the
+      # first object
       manipulate_attributes
       create_file
       write_associations if @options[:nested]
       write_attributes
       text = generate_factory(@object.class.name.downcase, @factory_body)
       @file.write_file(text)
+      self
     end
 
     def generate_factory(class_name, attributes)
@@ -39,9 +42,7 @@ end
     end
 
     def write_associations
-      association = AssociationManager.new(@object)
-      key_columns = association.get_association_info
-      key_columns.keys.each do |method|
+      association.columns_info.keys.each do |method|
         begin
           object =  @object.send(method)
           object = get_object(object)
@@ -50,7 +51,7 @@ end
           parent_included = @options[:parent].include? object_class
           (@options[:parent] << object_class).uniq!
           self.class.new(object, nested: true, parent: @options[:parent]).generate unless parent_included
-          @factory_body += association.determine_association(key_columns[method], object_class, method)
+          @factory_body += association.determine_association(association.columns_info[method], object_class, method)
           @attributes.delete_if {|k,v| k =~ Regexp.new(method) && !v.nil?}
         rescue => e
           puts "There was an error creating the association #{e} => #{e.backtrace}"
@@ -83,6 +84,10 @@ end
     def create_file
       @file ||= FileManager.new(@object.class.name.downcase, @options)
       @file.create_file
+    end
+
+    def association
+      AssociationManager.new(@object)
     end
   end
 end

@@ -5,7 +5,7 @@ module FactoryGenerator
       @klass = @item.class.name.constantize
     end
 
-    def get_association_info
+    def columns_info
       return_hash = {}
       @klass.reflections.keys.map do |x|
         reflection = @klass.reflections[x]
@@ -29,7 +29,7 @@ module FactoryGenerator
                create_has_manny_associations(association_info[:klass])
              end
       <<-EOF
-      #{text}
+    #{text}
       EOF
     end
 
@@ -40,9 +40,9 @@ module FactoryGenerator
     end
 
     def create_has_manny_associations(klass)
-    %Q(after(:create) do |x|
-        create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
-      end)
+      %Q(after(:create) do |x|
+      create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
+    end)
     end
   end
 end
