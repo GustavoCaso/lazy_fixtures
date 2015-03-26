@@ -18,10 +18,10 @@ module FactoryGenerator
 
     def map_values
       type = @object_class.columns_hash[@key].type
-      value =  if type == :string || type == :datetime || type == :text || type == :date
-                 "\'#{@value}\'"
-               elsif @value.nil?
+      value =  if @value.nil?
                  "nil"
+               elsif type == :string || type == :datetime || type == :text || type == :date
+                 "\'#{@value}\'"
                else
                  @value
                end

@@ -4,12 +4,12 @@ module FactoryGenerator
     attr_reader :factory_body, :file, :attributes, :options
 
     DEFAULT_OPTIONS = {
-        nested: false,
-        overwrite: false,
-        create: true,
-        parent: [],
-        skip_params: [],
-        params: {}
+        nested:      false,
+        overwrite:   false,
+        create:      true,
+        parent:      [],
+        skip_attr:   [],
+        change_attr: {}
     }
 
     def initialize(object, options = {})
@@ -77,8 +77,8 @@ end
     end
 
     def manipulate_attributes
-      @options[:skip_params].each { |x|  @attributes.delete(x)} unless options[:skip_params].empty?
-      @attributes.merge!(@options[:params]) unless @options[:params].empty?
+      @options[:skip_attr].each { |x|  @attributes.delete(x)} unless options[:skip_attr].empty?
+      @attributes.merge!(@options[:change_attr]) unless @options[:change_attr].empty?
     end
 
     def create_file
