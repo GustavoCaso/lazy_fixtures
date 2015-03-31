@@ -38,4 +38,13 @@ describe FactoryGenerator::ValueMapper do
     end
   end
 
+  describe '#remove_encrypted_attributes' do
+    it 'should return non encrypted values' do
+      dummy = Struct.new('User', :encrypted_name, :age, :name)
+      test_user = dummy.new('dueucvwuevcbwbcw', 23, 'gustavo')
+      value = FactoryGenerator::ValueMapper.new(test_user, 'encrypted_name', 'dueucvwuevcbwbcw').remove_encrypted_attributes
+      expect(value).to eq 'gustavo'
+    end
+  end
+
 end

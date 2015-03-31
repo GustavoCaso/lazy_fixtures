@@ -67,5 +67,49 @@ describe FactoryGenerator::Generator do
                   create: false).manipulate_attributes
       expect(factory_attr).to eq attributes
     end
+
+    describe 'getter object and determine validity of object methods' do
+
+      before(:each) do
+        @factory = FactoryGenerator::Generator.new(@user, create: false)
+      end
+
+      it '#invalid_object? will return true with nil value' do
+        return_value = @factory.invalid_object?(nil)
+        expect(return_value).to eq true
+      end
+
+      it '#invalid_object? will return true with empty value' do
+        return_value = @factory.invalid_object?([])
+        expect(return_value).to eq true
+      end
+
+      it '#invalid_object? will return false with valid value' do
+        return_value = @factory.invalid_object?(@user)
+        expect(return_value).to eq false
+      end
+
+      it '#get_object will return the object' do
+        return_value = @factory.get_object(@user)
+        expect(return_value).to eq @user
+      end
+
+      it '#get_object will return the object' do
+        return_value = @factory.get_object(nil)
+        expect(return_value).to eq nil
+      end
+
+      it '#get_object will return the object' do
+        return_value = @factory.get_object([])
+        expect(return_value).to eq nil
+      end
+
+      it '#get_object will return the object' do
+        user2 = User.new(name: 'Test', age: 30)
+        return_value = @factory.get_object([user2, @user])
+        expect(return_value).to eq user2
+      end
+
+    end
   end
 end

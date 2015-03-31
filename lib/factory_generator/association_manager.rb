@@ -12,10 +12,7 @@ module FactoryGenerator
         return_hash[x.to_s]= {
             method: x,
             macro: reflection.macro,
-            klass: reflection.class_name,
-            foreign_key: reflection.foreign_key,
-            foreign_type: reflection.foreign_type,
-            polymorphic: reflection.polymorphic?,
+            klass: reflection.class_name
         }
       end
       return_hash

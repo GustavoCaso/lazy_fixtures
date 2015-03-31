@@ -47,7 +47,7 @@ end
           object =  @object.send(method)
           object = get_object(object)
           object_class = object.class.name
-          next if invalid_object(object)
+          next if invalid_object?(object)
           parent_included = @options[:parent].include? object_class
           (@options[:parent] << object_class).uniq!
           self.class.new(object, nested: true, parent: @options[:parent]).generate unless parent_included
@@ -72,7 +72,7 @@ end
       object.respond_to?('first') ? object.first : object
     end
 
-    def invalid_object(object)
+    def invalid_object?(object)
       object.nil? || (object.respond_to?('first') && object.empty?)
     end
 

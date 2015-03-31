@@ -6,4 +6,11 @@ ActiveRecord::Schema.define do
     t.integer :age
     t.timestamps
   end
+
+  create_table :posts, force: true do |t|
+    t.string :title
+    t.string :post_body
+    t.integer :user_id
+    t.timestamps
+  end
 end
