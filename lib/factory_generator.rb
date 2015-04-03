@@ -3,6 +3,7 @@ require 'factory_generator/generator'
 require 'factory_generator/association_manager'
 require 'factory_generator/file_manager'
 require 'factory_generator/value_mapper'
+require 'factory_generator/attributes_manager'
 
 module FactoryGenerator
   class << self

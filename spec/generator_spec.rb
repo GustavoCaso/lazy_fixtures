@@ -45,27 +45,11 @@ describe FactoryGenerator::Generator do
       expect(@factory.options).to eq options
 
     end
-
-    it '#file' do
-      expect(@factory.file).to be_a FactoryGenerator::FileManager
-    end
   end
 
   describe 'generator methods' do
     before(:each) do
       @user = User.create(name: 'Gustavo', age: 26)
-    end
-
-    it '#manipulates_attributes will change and delete attributes from the object' do
-      attributes = {
-        'name' => 'Pedro',
-        'age'  => 29
-      }
-      factory_attr = FactoryGenerator::Generator.new(@user,
-                  skip_attr: %w(created_at updated_at id),
-                  change_attr:{'name' => 'Pedro', 'age' => 29},
-                  create: false).manipulate_attributes
-      expect(factory_attr).to eq attributes
     end
 
     describe 'getter object and determine validity of object methods' do

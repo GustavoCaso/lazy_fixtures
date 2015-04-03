@@ -23,7 +23,7 @@ module FactoryGenerator
       text = if relation == :belongs_to
                create_belongs_to_association(association_info[:klass], class_name, method)
              elsif relation == :has_many || relation == :has_and_belongs_to_many
-               create_has_manny_associations(association_info[:klass])
+               create_has_many_associations(association_info[:klass])
              end
       <<-EOF
     #{text}
@@ -36,7 +36,7 @@ module FactoryGenerator
       "association :#{method}, factory: :#{class_name.downcase}"
     end
 
-    def create_has_manny_associations(klass)
+    def create_has_many_associations(klass)
       %Q(after(:create) do |x|
       create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
     end)

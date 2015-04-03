@@ -11,3 +11,11 @@ end
 class Post < ActiveRecord::Base
   belongs_to :user
 end
+
+class UserWithEncrypted < ActiveRecord::Base
+
+  def password
+    encrypted_password
+  end
+
+end
