@@ -9,8 +9,22 @@ module FactoryGenerator
 
     def create_file
       return unless @options[:create]
-      puts "creating file #{@title}"
+      if check_existence? && !@options[:overwrite]
+        puts "There is a file already inside that folder with the same name"
+        puts "Would you like to overwrite that file? (yes/no)"
+        answer = gets.chomp
+        if answer ==  'yes'
+          puts 'The generator is overwriting your file'
+          File.new(@file_path, "w")
+          true
+        else
+          puts 'Exiting the program'
+          false
+        end
+      end
+      puts "creating new file under #{FactoryGenerator.configuration.factory_directory}"
       File.new(@file_path, "w")
+      true
     end
 
     def check_existence?
@@ -18,8 +32,6 @@ module FactoryGenerator
     end
 
     def write_file(text)
-      return unless @options[:create]
-      puts "writing file #{@title}"
       File.open(@file_path, 'w') do |f|
         f.write text
       end

@@ -1,7 +1,7 @@
 module FactoryGenerator
   class Generator
 
-    attr_reader :factory_body, :file, :attributes, :options
+    attr_reader :factory_body, :attributes, :options
 
     DEFAULT_OPTIONS = {
         nested:      false,
@@ -22,12 +22,13 @@ module FactoryGenerator
     def generate
       # In this first implementation of the gem it only allow to manipulate the
       # first object
-      manipulate_attributes
-      create_file
-      write_associations if @options[:nested]
-      write_attributes
+      attribute_manager.manipulate_attributes
+      add_associations if @options[:nested]
+      @factory_body += attribute_manager.add_attributes
       text = generate_factory(@object.class.name.downcase, @factory_body)
-      @file.write_file(text)
+      if create_file
+        @file.write_file(text)
+      end
       self
     end
 
@@ -41,7 +42,7 @@ end
       EOF
     end
 
-    def write_associations
+    def add_associations
       association.columns_info.keys.each do |method|
         begin
           object =  @object.send(method)
@@ -52,19 +53,11 @@ end
           (@options[:parent] << object_class).uniq!
           self.class.new(object, nested: true, parent: @options[:parent]).generate unless parent_included
           @factory_body += association.determine_association(association.columns_info[method], object_class, method)
-          @attributes.delete_if {|k,v| k =~ Regexp.new(method) && !v.nil?}
+          attribute_manager.delete_association_attributes(method)
         rescue => e
           puts "There was an error creating the association #{e} => #{e.backtrace}"
           next
         end
-      end
-    end
-
-    def write_attributes
-      @attributes.each do |k,v|
-        value =  ValueMapper.new(@object, k.dup, v).map_values
-        key = ValueMapper.remove_encrypted(k.dup)
-        @factory_body += "    #{key} #{value}\n"
       end
     end
 
@@ -76,11 +69,6 @@ end
       object.nil? || (object.respond_to?('first') && object.empty?)
     end
 
-    def manipulate_attributes
-      @options[:skip_attr].each { |x|  @attributes.delete(x)} unless options[:skip_attr].empty?
-      @attributes.merge!(@options[:change_attr]) unless @options[:change_attr].empty?
-    end
-
     def create_file
       @file ||= FileManager.new(@object.class.name.downcase, @options)
       @file.create_file
@@ -88,6 +76,10 @@ end
 
     def association
       AssociationManager.new(@object)
+    end
+
+    def attribute_manager
+      @attribute_manager ||= AttributesManager.new(@object, @options)
     end
   end
 end
