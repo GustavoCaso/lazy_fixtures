@@ -94,6 +94,18 @@ describe FactoryGenerator::Generator do
         expect(return_value).to eq user2
       end
 
+      it '#get_factory_name will return the name with appended string' do
+        FactoryGenerator.configuration.factory_names = ['user']
+        return_value = @factory.get_factory_name
+        expect(return_value).to eq 'user_new'
+      end
+
+      it '#get_factory_name will return the name' do
+        FactoryGenerator.configuration.factory_names = ['switch']
+        return_value = @factory.get_factory_name
+        expect(return_value).to eq 'user'
+      end
+
     end
   end
 end

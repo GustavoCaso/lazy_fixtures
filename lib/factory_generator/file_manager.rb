@@ -10,7 +10,7 @@ module FactoryGenerator
     def create_file
       return unless @options[:create]
       if check_existence? && !@options[:overwrite]
-        puts "There is a file already inside that folder with the same name"
+        puts "There is a file already inside that folder with the same name #{@name}"
         puts "Would you like to overwrite that file? (yes/no)"
         answer = gets.chomp
         if answer ==  'yes'
@@ -22,7 +22,7 @@ module FactoryGenerator
           false
         end
       end
-      puts "creating new file under #{FactoryGenerator.configuration.factory_directory}"
+      puts "creating new file under #{FactoryGenerator.configuration.factory_directory}/#{@name}"
       File.new(@file_path, "w")
       true
     end

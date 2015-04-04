@@ -15,6 +15,7 @@ module FactoryGenerator
     def initialize(object, options = {})
       @options = DEFAULT_OPTIONS.merge(options)
       @object = get_object(object)
+      @class_name = @object.class.name
       @attributes = @object.attributes
       @factory_body = ''
     end
@@ -25,18 +26,19 @@ module FactoryGenerator
       attribute_manager.manipulate_attributes
       add_associations if @options[:nested]
       @factory_body += attribute_manager.add_attributes
-      text = generate_factory(@object.class.name.downcase, @factory_body)
+      text = generate_factory
       if create_file
         @file.write_file(text)
       end
       self
     end
 
-    def generate_factory(class_name, attributes)
+    def generate_factory
+      factory_name = get_factory_name
       <<-EOF
 FactoryGirl.define do
-  factory :#{class_name} do
-#{attributes}
+  factory :#{factory_name}, class: #{@class_name.constantize} do
+#{@factory_body}
   end
 end
       EOF
@@ -80,6 +82,14 @@ end
 
     def attribute_manager
       @attribute_manager ||= AttributesManager.new(@object, @options)
+    end
+
+    def get_factory_name
+      if FactoryGenerator.configuration.factory_names.include?(@class_name.downcase)
+        "#{@class_name.downcase}_new"
+      else
+        @class_name.downcase
+      end
     end
   end
 end
