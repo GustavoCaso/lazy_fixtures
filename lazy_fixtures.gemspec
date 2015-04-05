@@ -13,7 +13,7 @@ Gem::Specification.new do |spec|
                           with different options you will be able to create a full compatible
                           factory tree from your database
                           }
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/GustavoCaso/lazy_fixtures"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files -z`.split("\x0")
