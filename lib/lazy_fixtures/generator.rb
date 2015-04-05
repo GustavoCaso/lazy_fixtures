@@ -1,4 +1,4 @@
-module FactoryGenerator
+module LazyFixtures
   class Generator
 
     attr_reader :factory_body, :attributes, :options
@@ -85,7 +85,7 @@ end
     end
 
     def get_factory_name
-      if FactoryGenerator.configuration.factory_names.include?(@class_name.downcase)
+      if LazyFixtures.configuration.factory_names.include?(@class_name.downcase)
         "#{@class_name.downcase}_new"
       else
         @class_name.downcase

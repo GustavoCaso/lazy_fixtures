@@ -1,11 +1,11 @@
 # coding: utf-8
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'factory_generator/version'
+require 'lazy_fixtures/version'
 
 Gem::Specification.new do |spec|
-  spec.name          = "factory_generator"
-  spec.version       = FactoryGenerator::VERSION
+  spec.name          = "lazy_fixtures"
+  spec.version       = LazyFixtures::VERSION
   spec.authors       = ["GustavoCaso"]
   spec.email         = ["gustavocaso@gmail.com"]
   spec.summary       = %q{Easy generator to save time when creating them}

@@ -1,10 +1,10 @@
-module FactoryGenerator
+module LazyFixtures
     class FileManager
       def initialize(name, options)
         @name = name
         @options = options
         @title = "#{@name}.rb"
-        @file_path = File.join(FactoryGenerator.configuration.factory_directory, @title)
+        @file_path = File.join(LazyFixtures.configuration.factory_directory, @title)
       end
 
     def create_file
@@ -22,7 +22,7 @@ module FactoryGenerator
           false
         end
       end
-      puts "creating new file under #{FactoryGenerator.configuration.factory_directory}/#{@name}"
+      puts "creating new file under #{LazyFixtures.configuration.factory_directory}/#{@name}"
       File.new(@file_path, "w")
       true
     end

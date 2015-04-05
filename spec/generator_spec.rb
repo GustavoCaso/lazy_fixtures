@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe FactoryGenerator::Generator do
+describe LazyFixtures::Generator do
 
   describe 'attr_reader' do
     before(:each) do
       @user = User.create(name: 'Gustavo', age: 26)
-      @factory = FactoryGenerator::Generator.new(@user, create: false).generate
+      @factory = LazyFixtures::Generator.new(@user, create: false).generate
     end
 
     it '#attributes' do
@@ -55,7 +55,7 @@ describe FactoryGenerator::Generator do
     describe 'getter object and determine validity of object methods' do
 
       before(:each) do
-        @factory = FactoryGenerator::Generator.new(@user, create: false)
+        @factory = LazyFixtures::Generator.new(@user, create: false)
       end
 
       it '#invalid_object? will return true with nil value' do
@@ -95,13 +95,13 @@ describe FactoryGenerator::Generator do
       end
 
       it '#get_factory_name will return the name with appended string' do
-        FactoryGenerator.configuration.factory_names = ['user']
+        LazyFixtures.configuration.factory_names = ['user']
         return_value = @factory.get_factory_name
         expect(return_value).to eq 'user_new'
       end
 
       it '#get_factory_name will return the name' do
-        FactoryGenerator.configuration.factory_names = ['switch']
+        LazyFixtures.configuration.factory_names = ['switch']
         return_value = @factory.get_factory_name
         expect(return_value).to eq 'user'
       end

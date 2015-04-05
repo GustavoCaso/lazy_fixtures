@@ -1,4 +1,4 @@
-module FactoryGenerator
+module LazyFixtures
   class ValueMapper
     def initialize(object, key, value)
       @object = object

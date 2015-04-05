@@ -1,5 +1,5 @@
-# FactoryGenerator
-[![Build Status](https://travis-ci.org/GustavoCaso/factory_generator.svg?branch=master)](https://travis-ci.org/GustavoCaso/factory_generator)
+# LazyFixtures
+[![Build Status](https://travis-ci.org/GustavoCaso/lazy_fixtures.svg?branch=master)](https://travis-ci.org/GustavoCaso/lazy_fixtures)
 
 Generator to create factory girl fixtures, just with a simple ActiveRecord object
 from your current database.
@@ -8,7 +8,7 @@ from your current database.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'factory_generator'
+gem 'lazy_fixtures'
 ```
 
 And then execute:
@@ -17,11 +17,11 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install factory_generator
+    $ gem install lazy_fixtures
 
 ## Usage
 
-Inside your console simple type `FactoryGenerator.generate()` inside the parenthesis place an ActiveRecord object, and this command will generate the corresponding file inside your project.
+Inside your console simple type `LazyFixtures.generate()` inside the parenthesis place an ActiveRecord object, and this command will generate the corresponding file inside your project.
 
 ## Initialisation
 
@@ -33,7 +33,7 @@ require 'factory_girl'
 FactoryGirl.factories.clear
 FactoryGirl.find_definitions
 
-FactoryGenerator.configure do |config|
+LazyFixtures.configure do |config|
   config.factory_directory = "#{specify which folder are your fixtures save}"
   config.factory_names = FactoryGirl.factories.map(&:name)
 end
@@ -55,19 +55,19 @@ There are several options you can pass to the generator, the method will receive
 
 ###This will create a switch fixture:
 
-`FactoryGenerator.generate(Switch.last)`
+`LazyFixtures.generate(Switch.last)`
 
 ###This will create a switch fixture and traverse all the associations:
 
-`FactoryGenerator.generate(Switch.last, nested: true)`
+`LazyFixtures.generate(Switch.last, nested: true)`
 
 ###This will create a switch fixture with skipped attributes:
 
-`FactoryGenerator.generate(Switch.last, skip_attr:['age', 'name'])`
+`LazyFixtures.generate(Switch.last, skip_attr:['age', 'name'])`
 
 ###This will create a switch fixture with custom values:
 
-`FactoryGenerator.generate(Switch.last, change_attr:{'age' => 34, 'name' => 'John'})`
+`LazyFixtures.generate(Switch.last, change_attr:{'age' => 34, 'name' => 'John'})`
 
 ##Notes
 This version is the first version, I want to add more functionality to it, skipping and changing nested attributes from the object, and many more.
@@ -77,7 +77,7 @@ Thanks.
 
 ## Contributing
 
-1. Fork it ( https://github.com/GustavoCaso/factory_generator/fork )
+1. Fork it ( https://github.com/GustavoCaso/lazy_fixtures/fork )
 2. Create your feature branch (`git checkout -b my-new-feature`)
 3. Commit your changes (`git commit -am 'Add some feature'`)
 4. Push to the branch (`git push origin my-new-feature`)

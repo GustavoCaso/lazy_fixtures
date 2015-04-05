@@ -1,4 +1,4 @@
-module FactoryGenerator 
+module LazyFixtures
   class AttributesManager
 
     attr_reader :attributes

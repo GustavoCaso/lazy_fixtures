@@ -1,4 +1,4 @@
-module FactoryGenerator
+module LazyFixtures
   class AssociationManager
     def initialize(item)
       @item = item

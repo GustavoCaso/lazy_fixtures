@@ -1,11 +1,11 @@
-require 'factory_generator/version'
-require 'factory_generator/generator'
-require 'factory_generator/association_manager'
-require 'factory_generator/file_manager'
-require 'factory_generator/value_mapper'
-require 'factory_generator/attributes_manager'
+require 'lazy_fixtures/version'
+require 'lazy_fixtures/generator'
+require 'lazy_fixtures/association_manager'
+require 'lazy_fixtures/file_manager'
+require 'lazy_fixtures/value_mapper'
+require 'lazy_fixtures/attributes_manager'
 
-module FactoryGenerator
+module LazyFixtures
   class << self
     attr_accessor :configuration
   end
@@ -25,6 +25,6 @@ module FactoryGenerator
   end
 
   def self.generate(object, options = {})
-    FactoryGenerator::Generator.new(object, options).generate
+    LazyFixtures::Generator.new(object, options).generate
   end
 end
