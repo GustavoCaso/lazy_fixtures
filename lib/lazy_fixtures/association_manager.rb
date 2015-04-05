@@ -10,7 +10,7 @@ module LazyFixtures
       @klass.reflections.keys.map do |x|
         reflection = @klass.reflections[x]
         return_hash[x.to_s]= {
-            method: x,
+            method: x.to_s,
             macro: reflection.macro,
             klass: reflection.class_name
         }

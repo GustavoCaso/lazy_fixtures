@@ -10,12 +10,12 @@ describe LazyFixtures::AssociationManager do
   describe '#columns_info' do
     it 'will return hash with reflections information' do
       return_value = LazyFixtures::AssociationManager.new(@user).columns_info
-      expect(return_value).to eq({'posts' => {method: :posts, macro: :has_many, klass: 'Post'}})
+      expect(return_value).to eq({'posts' => {method: "posts", macro: :has_many, klass: 'Post'}})
     end
 
     it 'will return hash with reflections information' do
       return_value = LazyFixtures::AssociationManager.new(@post).columns_info
-      expect(return_value).to eq('user' => {method: :user, macro: :belongs_to, klass: 'User'})
+      expect(return_value).to eq('user' => {method: "user", macro: :belongs_to, klass: 'User'})
     end
   end
 
