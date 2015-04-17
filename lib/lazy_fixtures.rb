@@ -4,6 +4,14 @@ require 'lazy_fixtures/association_manager'
 require 'lazy_fixtures/file_manager'
 require 'lazy_fixtures/value_mapper'
 require 'lazy_fixtures/attributes_manager'
+require 'lazy_fixtures/factory_girl_association'
+require 'lazy_fixtures/factory_girl_attributes'
+require 'lazy_fixtures/factory_girl_file'
+require 'lazy_fixtures/fixture_association'
+require 'lazy_fixtures/fixture_attributes'
+require 'lazy_fixtures/fixture_file'
+require 'lazy_fixtures/factory_girl_generator'
+require 'lazy_fixtures/fixture_generator'
 
 module LazyFixtures
   class << self
@@ -25,6 +33,6 @@ module LazyFixtures
   end
 
   def self.generate(object, options = {})
-    LazyFixtures::Generator.new(object, options).generate
+    LazyFixtures::FixtureGenerator.new(object, options).generate
   end
 end

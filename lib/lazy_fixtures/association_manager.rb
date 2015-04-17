@@ -23,7 +23,7 @@ module LazyFixtures
       text = if relation == :belongs_to
                create_belongs_to_association(association_info[:klass], class_name, method)
              elsif relation == :has_many || relation == :has_and_belongs_to_many
-               create_has_many_associations(association_info[:klass])
+               create_has_many_associations(association_info)
              end
       <<-EOF
     #{text}
@@ -31,15 +31,11 @@ module LazyFixtures
     end
 
     def create_belongs_to_association(klass, class_name, method)
-      method = method == klass.downcase ? klass.downcase : method
-      class_name = klass == class_name ? klass : class_name
-      "association :#{method}, factory: :#{class_name.downcase}"
+     raise 'Abstract method for AssociationManager'
     end
 
-    def create_has_many_associations(klass)
-      %Q(after(:create) do |x|
-      create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
-    end)
+    def create_has_many_associations(associaton_info)
+      raise 'Abstract method for AssociationManager'
     end
   end
 end

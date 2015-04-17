@@ -17,7 +17,7 @@ module LazyFixtures
       @object = get_object(object)
       @class_name = @object.class.name
       @attributes = @object.attributes
-      @factory_body = ''
+      set_factory_body
     end
 
     def generate
@@ -25,7 +25,7 @@ module LazyFixtures
       # first object
       attribute_manager.manipulate_attributes
       add_associations if @options[:nested]
-      @factory_body += attribute_manager.add_attributes
+      @factory_body = attribute_manager.add_attributes
       text = generate_factory
       if create_file
         @file.write_file(text)
@@ -34,14 +34,7 @@ module LazyFixtures
     end
 
     def generate_factory
-      factory_name = get_factory_name
-      <<-EOF
-FactoryGirl.define do
-  factory :#{factory_name}, class: #{@class_name.constantize} do
-#{@factory_body}
-  end
-end
-      EOF
+      raise 'Abstract method for Generator'
     end
 
     def add_associations
@@ -54,7 +47,7 @@ end
           parent_included = @options[:parent].include? object_class
           (@options[:parent] << object_class).uniq!
           self.class.new(object, nested: true, parent: @options[:parent]).generate unless parent_included
-          @factory_body += association.determine_association(association.columns_info[method], object_class, method)
+          add_association_to_factory_body(association.columns_info[method], object_class, method)
           attribute_manager.delete_association_attributes(method)
         rescue => e
           puts "There was an error creating the association #{e} => #{e.backtrace}"
@@ -72,24 +65,23 @@ end
     end
 
     def create_file
-      @file ||= FileManager.new(@object.class.name.downcase, @options)
-      @file.create_file
+      raise 'Abstract method for Generator'
     end
 
     def association
-      AssociationManager.new(@object)
+      raise 'Abstract method for Generator'
     end
 
     def attribute_manager
-      @attribute_manager ||= AttributesManager.new(@object, @options)
+      raise 'Abstract method for Generator'
     end
 
-    def get_factory_name
-      if LazyFixtures.configuration.factory_names.include?(@class_name.downcase)
-        "#{@class_name.downcase}_new"
-      else
-        @class_name.downcase
-      end
+    def add_association_to_factory_body(association_method_info, object_class, method)
+      raise 'Abstract method for Generator'
+    end
+
+    def set_factory_body
+      raise 'Abstract method for Generator'
     end
   end
 end

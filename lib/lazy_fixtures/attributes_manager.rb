@@ -1,7 +1,7 @@
 module LazyFixtures
   class AttributesManager
 
-    attr_reader :attributes
+    attr_accessor :attributes
 
     def initialize(object, options={})
       @object = object
@@ -26,7 +26,7 @@ module LazyFixtures
     end
 
     def delete_association_attributes(method)
-      attributes.delete_if {|k,v| k =~ Regexp.new(method) && !v.nil?}
+      raise 'Abstract method for Attributes manager'
     end
 
     def each

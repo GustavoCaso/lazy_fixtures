@@ -1,11 +1,15 @@
 module LazyFixtures
-    class FileManager
-      def initialize(name, options)
-        @name = name
-        @options = options
-        @title = "#{@name}.rb"
-        @file_path = File.join(LazyFixtures.configuration.factory_directory, @title)
-      end
+  class FileManager
+    def initialize(name, options)
+      @name = name
+      @options = options
+      @title = determine_name(@name)
+      @file_path = File.join(LazyFixtures.configuration.factory_directory || 'spec/fixtures', @title)
+    end
+
+    def determine_name(name)
+      raise 'Abstract Method for FileManager'
+    end
 
     def create_file
       return unless @options[:create]
@@ -22,7 +26,7 @@ module LazyFixtures
           false
         end
       end
-      puts "creating new file under #{LazyFixtures.configuration.factory_directory}/#{@name}"
+      puts "creating new file under #{@file_path}"
       File.new(@file_path, "w")
       true
     end
@@ -32,9 +36,7 @@ module LazyFixtures
     end
 
     def write_file(text)
-      File.open(@file_path, 'w') do |f|
-        f.write text
-      end
+      raise 'Abstract method for FileManager'
     end
   end
 end
