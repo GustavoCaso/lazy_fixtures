@@ -26,7 +26,7 @@ end
     end
 
     def association
-      FactoryGirlAssociation.new(@object)
+      @association ||= FactoryGirlAssociation.new(@object)
     end
 
     def attribute_manager

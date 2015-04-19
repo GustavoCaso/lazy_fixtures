@@ -22,17 +22,13 @@ module LazyFixtures
 
     def generate
       attribute_manager.manipulate_attributes
-      add_associations if @options[:nested]
       @factory_body = attribute_manager.add_attributes
+      add_associations if @options[:nested]
       text = generate_factory
       if create_file
         @file.write_file(text)
       end
       self
-    end
-
-    def generate_factory
-      raise 'Abstract method for Generator'
     end
 
     def add_associations
@@ -49,7 +45,7 @@ module LazyFixtures
           attribute_manager.delete_association_attributes(method)
         rescue => e
           puts "There was an error creating the association #{e} => #{e.backtrace}"
-          next
+          exit
         end
       end
     end
@@ -79,6 +75,10 @@ module LazyFixtures
     end
 
     def set_factory_body
+      raise 'Abstract method for Generator'
+    end
+
+    def generate_factory
       raise 'Abstract method for Generator'
     end
   end

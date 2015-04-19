@@ -13,5 +13,11 @@ module LazyFixtures
     end)
     end
 
+    def return_value(result)
+      <<-EOF
+    #{result}
+      EOF
+    end
+
   end
 end

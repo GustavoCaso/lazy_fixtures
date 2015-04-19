@@ -2,6 +2,7 @@ module LazyFixtures
   class FixtureGenerator < LazyFixtures::Generator
     def set_factory_body
       @factory_body = {}
+      @factory_body[@class_name.downcase] = {}
     end
 
     def generate_factory
@@ -9,7 +10,10 @@ module LazyFixtures
     end
 
     def add_association_to_factory_body(association_method_info, object_class, method)
-      @factory_body[@object.class.name.downcase].merge association.determine_association(association_method_info, object_class, method)
+      association_result = association.determine_association(association_method_info,
+                                                      object_class, method)
+      @factory_body[@class_name.downcase].merge!(association_result)
+      @factory_body
     end
 
     def create_file
@@ -19,11 +23,11 @@ module LazyFixtures
     end
 
     def association
-      FixtureAssociation.new(@object)
+      @association ||= FixtureAssociation.new(@object)
     end
 
     def attribute_manager
-      @attribute_manager ||= FixtureAttributes.new(@object, @options)
+      @attribute_manager ||= FixtureAttributes.new(@object, @factory_body, @options)
     end
   end
 end

@@ -8,5 +8,9 @@ module LazyFixtures
     def create_has_many_associations(association_info)
       {"#{association_info[:method]}" => association_info[:klass].downcase}
     end
+
+    def return_value(value)
+      value
+    end
   end
 end

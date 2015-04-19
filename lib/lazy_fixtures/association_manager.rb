@@ -20,14 +20,12 @@ module LazyFixtures
 
     def determine_association(association_info, class_name, method)
       relation = association_info[:macro]
-      text = if relation == :belongs_to
+      result = if relation == :belongs_to
                create_belongs_to_association(association_info[:klass], class_name, method)
              elsif relation == :has_many || relation == :has_and_belongs_to_many
                create_has_many_associations(association_info)
              end
-      <<-EOF
-    #{text}
-      EOF
+      return_value(result)
     end
 
     def create_belongs_to_association(klass, class_name, method)
@@ -35,6 +33,10 @@ module LazyFixtures
     end
 
     def create_has_many_associations(associaton_info)
+      raise 'Abstract method for AssociationManager'
+    end
+
+    def return_value(result)
       raise 'Abstract method for AssociationManager'
     end
   end
