@@ -3,7 +3,6 @@ module LazyFixtures
 
     def create_belongs_to_association(klass, class_name, method)
       {"#{method}" => class_name}
-
     end
 
     def create_has_many_associations(association_info)

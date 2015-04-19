@@ -1,7 +1,7 @@
 module LazyFixtures
   class Generator
 
-    attr_reader :factory_body, :attributes, :options
+    attr_accessor :factory_body, :attributes, :options
 
     DEFAULT_OPTIONS = {
         nested:      false,
@@ -21,8 +21,6 @@ module LazyFixtures
     end
 
     def generate
-      # In this first implementation of the gem it only allow to manipulate the
-      # first object
       attribute_manager.manipulate_attributes
       add_associations if @options[:nested]
       @factory_body = attribute_manager.add_attributes

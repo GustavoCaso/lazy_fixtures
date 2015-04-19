@@ -33,6 +33,12 @@ module LazyFixtures
   end
 
   def self.generate(object, options = {})
-    LazyFixtures::FixtureGenerator.new(object, options).generate
+    if options[:type] == 'fixture'
+      LazyFixtures::FixtureGenerator.new(object, options).generate
+    elsif options[:type] == 'factory_girl'
+      LazyFixtures::FactoryGirlGenerator.new(object, options).generate
+    else
+      raise "Invalid type specified #{options[:type]}"
+    end
   end
 end
