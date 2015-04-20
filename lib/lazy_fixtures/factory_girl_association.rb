@@ -1,7 +1,8 @@
 module LazyFixtures
   class FactoryGirlAssociation < LazyFixtures::AssociationManager
 
-    def create_belongs_to_association(klass, class_name, method)
+    def create_belongs_to_association(association_info, class_name, method)
+      klass = association_info[:klass]
       method = method == klass.downcase ? klass.downcase : method
       class_name = klass == class_name ? klass : class_name
       "association :#{method}, factory: :#{class_name.downcase}"

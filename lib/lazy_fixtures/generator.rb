@@ -22,6 +22,7 @@ module LazyFixtures
 
     def generate
       attribute_manager.manipulate_attributes
+      attribute_manager.delete_association_attributes if @options[:nested]
       @factory_body = attribute_manager.add_attributes
       add_associations if @options[:nested]
       text = generate_factory
@@ -42,7 +43,6 @@ module LazyFixtures
           (@options[:parent] << object_class).uniq!
           self.class.new(object, nested: true, parent: @options[:parent]).generate unless parent_included
           add_association_to_factory_body(association.columns_info[method], object_class, method)
-          attribute_manager.delete_association_attributes(method)
         rescue => e
           puts "There was an error creating the association #{e} => #{e.backtrace}"
           exit

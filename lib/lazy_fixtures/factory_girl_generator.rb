@@ -30,7 +30,7 @@ end
     end
 
     def attribute_manager
-      @attribute_manager ||= FactoryGirlAttributes.new(@object, @options)
+      @attribute_manager ||= FactoryGirlAttributes.new(@object, @factory_body, @options)
     end
 
     def get_factory_name

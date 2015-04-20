@@ -2,7 +2,7 @@ module LazyFixtures
   class FixtureGenerator < LazyFixtures::Generator
     def set_factory_body
       @factory_body = {}
-      @factory_body[@class_name.downcase] = {}
+      @factory_body[@class_name.underscore] = {}
     end
 
     def generate_factory
@@ -12,7 +12,7 @@ module LazyFixtures
     def add_association_to_factory_body(association_method_info, object_class, method)
       association_result = association.determine_association(association_method_info,
                                                       object_class, method)
-      @factory_body[@class_name.downcase].merge!(association_result)
+      @factory_body[@class_name.underscore].merge!(association_result)
       @factory_body
     end
 

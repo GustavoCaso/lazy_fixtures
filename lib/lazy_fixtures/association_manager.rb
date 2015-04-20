@@ -12,6 +12,7 @@ module LazyFixtures
         return_hash[x.to_s]= {
             method: x.to_s,
             macro: reflection.macro,
+            polymorphic: reflection.options[:polymorphic],
             klass: reflection.class_name
         }
       end
@@ -21,7 +22,7 @@ module LazyFixtures
     def determine_association(association_info, class_name, method)
       relation = association_info[:macro]
       result = if relation == :belongs_to
-               create_belongs_to_association(association_info[:klass], class_name, method)
+               create_belongs_to_association(association_info, class_name, method)
              elsif relation == :has_many || relation == :has_and_belongs_to_many
                create_has_many_associations(association_info)
              end

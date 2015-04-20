@@ -3,7 +3,7 @@ module LazyFixtures
 
     attr_accessor :attributes
 
-    def initialize(object, factory_body= nil, options={})
+    def initialize(object, factory_body, options={})
       @object = object
       @attributes = @object.attributes
       @factory_body = factory_body
@@ -20,8 +20,11 @@ module LazyFixtures
       raise 'Abstract method for Attributes manager'
     end
 
-    def delete_association_attributes(method)
-      raise 'Abstract method for Attributes manager'
+    def delete_association_attributes
+      attributes.delete_if do |k,v|
+        k =~ Regexp.new('.+_(id|type)') && !v.nil?
+      end
+      attributes
     end
 
     def each

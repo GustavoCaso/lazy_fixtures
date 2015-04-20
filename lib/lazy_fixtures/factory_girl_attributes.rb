@@ -9,9 +9,5 @@ module LazyFixtures
       end
       return_value
     end
-
-    def delete_association_attributes(method)
-      attributes.delete_if {|k,v| k =~ Regexp.new(method) && !v.nil?}
-    end
   end
 end
