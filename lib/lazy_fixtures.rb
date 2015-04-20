@@ -14,6 +14,18 @@ require 'lazy_fixtures/factory_girl_generator'
 require 'lazy_fixtures/fixture_generator'
 
 module LazyFixtures
+
+  DEFAULT_OPTIONS = {
+      nested:      false,
+      type:        'factory_girl',
+      overwrite:   false,
+      create:      true,
+      parent:      [],
+      skip_attr:   [],
+      change_attr: {}
+  }
+
+
   class << self
     attr_accessor :configuration
   end
@@ -33,6 +45,8 @@ module LazyFixtures
   end
 
   def self.generate(object, options = {})
+    options = DEFAULT_OPTIONS.merge(options)
+
     if options[:type] == 'fixture'
       LazyFixtures::FixtureGenerator.new(object, options).generate
     elsif options[:type] == 'factory_girl'
@@ -40,5 +54,6 @@ module LazyFixtures
     else
       raise "Invalid type specified #{options[:type]}"
     end
+
   end
 end

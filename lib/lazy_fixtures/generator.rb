@@ -3,17 +3,8 @@ module LazyFixtures
 
     attr_accessor :factory_body, :attributes, :options
 
-    DEFAULT_OPTIONS = {
-        nested:      false,
-        overwrite:   false,
-        create:      true,
-        parent:      [],
-        skip_attr:   [],
-        change_attr: {}
-    }
-
     def initialize(object, options = {})
-      @options = DEFAULT_OPTIONS.merge(options)
+      @options = options
       @object = get_object(object)
       @class_name = @object.class.name
       @attributes = @object.attributes
@@ -21,15 +12,19 @@ module LazyFixtures
     end
 
     def generate
-      attribute_manager.manipulate_attributes
-      attribute_manager.delete_association_attributes if @options[:nested]
-      @factory_body = attribute_manager.add_attributes
-      add_associations if @options[:nested]
-      text = generate_factory
-      if create_file
-        @file.write_file(text)
+      begin
+        attribute_manager.manipulate_attributes
+        attribute_manager.delete_association_attributes if @options[:nested]
+        @factory_body = attribute_manager.add_attributes
+        add_associations if @options[:nested]
+        text = generate_factory
+        if create_file
+          @file.write_file(text)
+        end
+        self
+      rescue => e
+        puts "There was an error generating the fixture #{e.backtrace}"
       end
-      self
     end
 
     def add_associations
