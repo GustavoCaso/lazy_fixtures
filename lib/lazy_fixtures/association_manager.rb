@@ -31,14 +31,14 @@ module LazyFixtures
     end
 
     def create_belongs_to_association(klass, class_name, method)
-      method = method == klass.downcase ? klass.downcase : method
+      method = method == klass.underscore ? klass.underscore : method
       class_name = klass == class_name ? klass : class_name
-      "association :#{method}, factory: :#{class_name.downcase}"
+      "association :#{method}, factory: :#{class_name.underscore}"
     end
 
     def create_has_many_associations(klass)
       %Q(after(:create) do |x|
-      create_list(:#{klass.downcase}, 1, #{@item.class.name.downcase}: x)
+      create_list(:#{klass.underscore}, 1, #{@item.class.name.underscore}: x)
     end)
     end
   end
