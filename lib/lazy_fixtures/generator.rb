@@ -72,7 +72,7 @@ end
     end
 
     def create_file
-      @file ||= FileManager.new(@object.class.name.downcase, @options)
+      @file ||= FileManager.new(@object.class.name.underscore, @options)
       @file.create_file
     end
 
