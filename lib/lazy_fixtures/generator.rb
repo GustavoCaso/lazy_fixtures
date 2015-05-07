@@ -72,7 +72,7 @@ end
     end
 
     def create_file
-      @file ||= FileManager.new(@object.class.name.downcase, @options)
+      @file ||= FileManager.new(@object.class.name.underscore, @options)
       @file.create_file
     end
 
@@ -85,10 +85,10 @@ end
     end
 
     def get_factory_name
-      if LazyFixtures.configuration.factory_names.include?(@class_name.downcase)
-        "#{@class_name.downcase}_new"
+      if LazyFixtures.configuration.factory_names.include?(@class_name.underscore)
+        "#{@class_name.underscore}_new"
       else
-        @class_name.downcase
+        @class_name.underscore
       end
     end
   end
