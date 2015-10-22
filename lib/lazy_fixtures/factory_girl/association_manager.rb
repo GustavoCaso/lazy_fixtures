@@ -1,10 +1,21 @@
 module LazyFixtures
   module FactoryGirl
     class AssociationManager
-      def initialize(item)
-        @item = item
-        @klass = @item.class.name.constantize
+      include LazyFixtures::ObjectHelper
+
+      attr_reader :object
+      def initialize(object)
+        @object = object
+        @klass = @object.class.name.constantize
       end
+
+      def get_associations
+        columns_info.keys.map do |method|
+          get_object(object.send(method))
+        end
+      end
+
+      private
 
       def columns_info
         @klass.reflections.keys.map do |x|
@@ -20,29 +31,6 @@ module LazyFixtures
         end.to_h
       end
 
-      def determine_association(association_info, class_name, method)
-        relation = association_info[:macro]
-        text = if relation == :belongs_to
-                 create_belongs_to_association(association_info[:klass], class_name, method)
-               elsif relation == :has_many || relation == :has_and_belongs_to_many
-                 create_has_many_associations(association_info[:klass])
-               end
-        <<-EOF
-    #{text}
-        EOF
-      end
-
-      def create_belongs_to_association(klass, class_name, method)
-        method = method == klass.underscore ? klass.underscore : method
-        class_name = klass == class_name ? klass : class_name
-        "association :#{method}, factory: :#{class_name.underscore}"
-      end
-
-      def create_has_many_associations(klass)
-        %Q(after(:create) do |x|
-      create_list(:#{klass.underscore}, 1, #{@item.class.name.underscore}: x)
-    end)
-      end
     end
   end
 end

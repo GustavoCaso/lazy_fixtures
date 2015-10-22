@@ -1,4 +1,3 @@
-require 'pry'
 require 'spec_helper'
 
 describe LazyFixtures::FactoryGirl::AttributesManager do

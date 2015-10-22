@@ -1,3 +1,4 @@
+require 'pry'
 module LazyFixtures
   module FactoryGirl
     class FactoryGirl
@@ -15,7 +16,7 @@ module LazyFixtures
             stringify_attributes)
           )
         end
-        self
+        run_associations if options[:nested]
       end
 
       private
@@ -23,11 +24,11 @@ module LazyFixtures
       def generate_factory(text)
         factory_name = get_factory_name
         <<-EOF
-  FactoryGirl.define do
-    factory :#{factory_name}, class: #{class_name.constantize} do
-  #{text}
-    end
+FactoryGirl.define do
+  factory :#{factory_name}, class: #{class_name.constantize} do
+#{text.chomp}
   end
+end
         EOF
       end
 
@@ -44,6 +45,24 @@ module LazyFixtures
         end
       end
 
+      def run_associations
+        get_associations.each do |association|
+          unless options[:parent].include? association.class.name
+            (options[:parent] << association.class.name).uniq!
+            LazyFixtures::Generator.new(association, nested: true, parent: options[:parent]).
+              generate('FactoryGirl')
+          end
+        end
+      end
+
+      def get_associations
+        association.get_associations
+      end
+
+      def association
+        AssociationManager.new(object)
+      end
+
       def global_factory_names
         LazyFixtures.configuration.factory_names
       end
@@ -58,26 +77,3 @@ module LazyFixtures
     end
   end
 end
-
-# def add_associations
-    #   association.columns_info.keys.each do |method|
-    #     begin
-    #       object = get_object(@object.send(method))
-    #       object_class = object.class.name
-    #       next if invalid_object?(object)
-    #       (@options[:parent] << object_class).uniq!
-    #       self.class.new(object, nested: true, parent: @options[:parent]).generate unless @options[:parent].include?(object_class)
-    #       @result_body += association.determine_association(association.columns_info[method], object_class, method)
-    #       attribute_manager.delete_association_attributes(method)
-    #     rescue => e
-    #       puts "There was an error creating the association #{e} => #{e.backtrace}"
-    #       next
-    #     end
-    #   end
-    # end
-
-
-
-    # def association
-    #   AssociationManager.new(@object)
-    # end
