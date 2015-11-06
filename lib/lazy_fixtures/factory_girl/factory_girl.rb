@@ -1,4 +1,3 @@
-require 'pry'
 module LazyFixtures
   module FactoryGirl
     class FactoryGirl

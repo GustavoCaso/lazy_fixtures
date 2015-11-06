@@ -6,7 +6,7 @@ describe LazyFixtures::FactoryGirl::FactoryGirl do
 
   context 'Create FactoryGirl File' do
     xit 'write the specific file' do
-      LazyFixtures::Generator.new(post, {create: false}).generate('FactoryGirl')
+      LazyFixtures::Generator.new(post, {create: false, nested: true}).generate('FactoryGirl')
 
       expect(File.exist?("#{LazyFixtures.configuration.factory_directory}/post.rb"))
     end

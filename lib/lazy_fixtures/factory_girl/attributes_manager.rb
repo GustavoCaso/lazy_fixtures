@@ -12,10 +12,6 @@ module LazyFixtures
         manipulate_attributes
       end
 
-      def delete_association_attributes(method)
-        attributes.delete_if {|k,v| k =~ Regexp.new(method) && !v.nil?}
-      end
-
       def each
         attributes
       end
@@ -28,11 +24,16 @@ module LazyFixtures
         end.join
       end
 
+      def delete_association_attributes
+        attributes.delete_if {|k,v| k =~ Regexp.new(/.+_id/) && !v.nil?}
+      end
+
       private
 
       def manipulate_attributes
         options[:skip_attr].each { |x|  attributes.delete(x)} if options[:skip_attr].any?
         attributes.merge!(options[:change_attr]) if options[:change_attr].any?
+        delete_association_attributes
       end
     end
   end

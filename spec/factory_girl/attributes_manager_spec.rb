@@ -55,6 +55,6 @@ describe LazyFixtures::FactoryGirl::AttributesManager do
     attributes_manager = described_class.new(post, options)
     expected_attributes = {'id' => post.id, 'title' => post.title,
                            'post_body' => post.post_body}
-    expect(attributes_manager.delete_association_attributes('user')).to eq expected_attributes
+    expect(attributes_manager.delete_association_attributes).to eq expected_attributes
   end
 end
