@@ -6,7 +6,7 @@ load File.dirname(__FILE__) + '/support/schema.rb'
 require File.dirname(__FILE__) +'/support/models'
 
 LazyFixtures.configure do |config|
-  config.factory_directory = '.'
+  config.factory_directory = './tmp/test'
   config.factory_names = []
 end
 
